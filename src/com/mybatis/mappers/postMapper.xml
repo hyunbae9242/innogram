@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innogram.dao.PostDao">
+  <select id="selectPost" resultType="post" parameterType="post">
+  	select * from ig_post where post_id = #{postId}
+  </select>
+  
+  <select id="selectPostList" resultType="post" parameterType="post">
+  	select * from ig_post
+  	<where>
+  		<if test='postId != null and postId != ""'>
+  			and post_id = #{postId}
+  		</if>
+  		<if test='postTitle != null and postTitle != ""'>
+  			and post_title like  '%' || #{postTitle} || '%'
+  		</if>
+  		<if test='postUserId != null and postUserId != ""'>
+  			and post_user_id like '%' || #{postUserId} || '%'
+  		</if>
+  		<if test='postDeleteYn != null and postDeleteYn != ""'>
+  			and post_delete_yn = #{postDeleteYn}
+  		</if>
+  	</where>
+  	order by post_id desc
+  </select>
+  
+  <insert id="insertPost" parameterType="post">
+  	<selectKey keyProperty="postId" resultType="int" order="BEFORE">
+  		select seq_ig_post_id.nextval from dual
+  	</selectKey>
+  	insert into ig_post (
+  		post_id, post_title, post_contents, post_user_id, post_password, post_created_date, post_ip
+  	)values(
+  		#{postId}, #{postTitle}, #{postContents}, #{postUserId}, #{postPassword}, sysdate, #{postIp}
+  	)
+  </insert>
+  
+  <update id="updatePost" parameterType="post">
+  	update ig_post
+  	<set>
+  		post_updated_date = sysdate
+  		
+  		<if test='postTitle != null and postTitle != ""'>
+  			post_title = #{postTitle}
+  		</if>
+  		<if test='postContents != null and postContents != ""'>
+  			post_contents = #{postContents}
+  		</if>
+  			
+  		<if test='postLike != null and postLike != ""'>
+  			post_like = #{postLike}
+  		</if>
+  		<if test='postDeleteYn != null and postDeleteYn != ""'>
+  			post_delete_yn = #{postDeleteYn}
+  		</if>
+  	</set>
+  	where post_id = #{postId}
+  </update>
+  <update id="updateLikePost" parameterType="post">
+  	update ig_post
+  	<set>
+  		post_like = post_like + 1
+  	</set>
+  	where post_id = #{postId}
+  </update>
+</mapper>
