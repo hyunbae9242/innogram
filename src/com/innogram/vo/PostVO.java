@@ -2,6 +2,7 @@ package com.innogram.vo;
 
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -17,6 +18,7 @@ public class PostVO {
 	private Integer postLike;
 	private Integer postDeleteYn;
 	private String postIp;
+	private List<CommentVO> commentList;
 	
 	public Integer getPostId() {
 		return postId;
@@ -78,13 +80,17 @@ public class PostVO {
 	public void setPostIp(String postIp) {
 		this.postIp = postIp;
 	}
-	
+	public List<CommentVO> getCommentList() {
+		return commentList;
+	}
+	public void setCommentList(List<CommentVO> commentList) {
+		this.commentList = commentList;
+	}
 	@Override
 	public String toString() {
 		return "PostVO [postId=" + postId + ", postTitle=" + postTitle + ", postContents=" + postContents
 				+ ", postUserId=" + postUserId + ", postPassword=" + postPassword + ", postCreatedDate="
 				+ postCreatedDate + ", postUpdatedDate=" + postUpdatedDate + ", postLike=" + postLike
-				+ ", postDeleteYn=" + postDeleteYn + ", postIp=" + postIp + "]";
+				+ ", postDeleteYn=" + postDeleteYn + ", postIp=" + postIp + ", commentList=" + commentList + "]";
 	}
-	
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innogram.dao.CommentDao">
+
+  <insert id="insertComment" parameterType="comment">
+  	<selectKey keyProperty="commentId" resultType="int" order="BEFORE">
+  		select seq_ig_comment_id.nextval from dual
+  	</selectKey>
+  	insert into ig_comment (
+  		comment_id, post_id, comment_created_date, comment_user_id, comment_contents, comment_depth, comment_base_id
+  	)values(
+  		#{commentId}, #{postId}, sysdate, #{commentUserId}, #{commentContents}, #{commentDepth}, #{commentBaseId}
+  	)
+  </insert>
+  
+  <select id="selectCommentList" resultType="comment">
+  	select
+  		comment_id,
+  		post_id,
+  		comment_user_id,
+  		case when comment_delete_yn = 1 then '삭제된 댓글 입니다.'
+  			else comment_contents end comment_contents,
+  		comment_depth,
+  		comment_base_id,
+  		comment_created_date,
+  		comment_delete_yn
+  	from ig_comment
+  	where 1=1
+  		and post_id = #{postId}
+  	start with comment_base_id is NULL
+	connect by PRIOR comment_id = comment_base_id
+	order SIBLINGS by comment_created_date
+  </select>
+  
+  <update id="updateComment" parameterType="comment">
+  	update ig_comment 
+	<set>
+		<if test="commentContents != null and commentContents != ''">
+			comment_contents = #{commentContents}
+		</if>
+		<if test="commentDeleteYn != null and commentDeleteYn != ''">
+			comment_delete_yn = #{commentDeleteYn}
+		</if>		
+	</set>
+  	where comment_id = #{commentId}
+  </update>
+</mapper>

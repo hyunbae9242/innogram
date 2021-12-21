@@ -29,5 +29,6 @@
   <mappers>
     <mapper resource="com/mybatis/mappers/postMapper.xml"/>
     <mapper resource="com/mybatis/mappers/likeMapper.xml"/>
+    <mapper resource="com/mybatis/mappers/commentMapper.xml"/>
   </mappers>
 </configuration>

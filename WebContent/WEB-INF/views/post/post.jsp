@@ -64,7 +64,6 @@
 						alert('로그인이 필요합니다!');
 						location.href = '/';
 					}
-					alert('먼가 잘못되어가는것같아..');
 				}
 			},
 			error : function(err){
